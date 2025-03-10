@@ -1,30 +1,55 @@
-// Task 1: Creating the Base Structure
-// Task 2: Adding Employee Cards Dynamically
+// (Task #2) Function to create and add an employee card
 function createEmployeeCard(name, position) {
     const container = document.getElementById("employeeContainer");
+// Creating the card element
     const card = document.createElement("div");
     card.setAttribute("class", "employee-card");
-    // Header for employee name
+// Creating heading for employee name
     const nameHeading = document.createElement("h2");
     nameHeading.textContent = name;
-    // Paragraph for Employee position.
+// Creating paragraph for employee position
     const positionPara = document.createElement("p");
     positionPara.textContent = position;
-    // Remove button for employee cards.
+// Creating remove button
     const removeButton = document.createElement("button");
     removeButton.textContent = "Remove";
     removeButton.setAttribute("class", "remove-btn");
-    removeButton.addEventListener("click", function () {
-        container.removeChild(card);
-    // Creating Edit button.
-        const editButton = document.createElement("button");
+
+// (Task #4) Add event listener to remove the card and stop propagation
+    removeButton.addEventListener("click", function (event) {
+        container.removeChild(card); 
+        event.stopPropagation(); 
+    });
+// Edit button for inline editing
+    const editButton = document.createElement("button");
     editButton.textContent = "Edit";
     editButton.setAttribute("class", "edit-btn");
-    // Click Event listener (Task #4)
-    removeButton.addEventListener("click", function (event) {
-        container.removeChild(card); // Remove the specific card
-        event.stopPropagation(); // Prevent event from bubbling to the container
-    });
+
+// Adding event listener to the edit button
+    editButton.addEventListener("click", function () {
+        nameHeading.innerHTML = `<input type="text" value="${name}">`; 
+        positionPara.innerHTML = `<input type="text" value="${position}">`; 
+// Create and display the Save button to save the new details
+        const saveButton = document.createElement("button");
+        saveButton.textContent = "Save";
+        saveButton.setAttribute("class", "save-btn");
+// Replace the "Edit" button with the "Save" button
+        card.replaceChild(saveButton, editButton);
+// Add event listener to the Save button to save changes
+        saveButton.addEventListener("click", function () {
+            // Get the new values from the input fields
+            const newName = nameHeading.querySelector("input").value;
+            const newPosition = positionPara.querySelector("input").value;
+// Update the employee card with the new values
+            nameHeading.textContent = newName;
+            positionPara.textContent = newPosition;
+// Replace the "Save" button back with the "Edit" button
+            card.replaceChild(editButton, saveButton);
+// (Task #3) Highlight all employee cards after updating the current one
+            document.querySelectorAll(".employee-card").forEach(function(card) {
+                card.classList.add("highlight"); 
+            });
+        });
     });
     card.appendChild(nameHeading);
     card.appendChild(positionPara);
@@ -32,22 +57,10 @@ function createEmployeeCard(name, position) {
     card.appendChild(editButton);
     container.appendChild(card);
 }
+// Event listener on the employeeContainer
 document.getElementById("employeeContainer").addEventListener("click", function () {
     console.log("An employee card was clicked!");
 });
 createEmployeeCard("Sam Bam", "Software Engineer");
 createEmployeeCard("Bruce Wayne", "Project Manager");
 
-// Task 3: Converting NodeLists to Arrays for Bulk Updates
-function highlightEmployeeCards() {
-    // Selecting all employee cards
-    const employeeCards = document.querySelectorAll(".employee-card");
-    // Updating styles
-    Array.from(employeeCards).forEach (card => {
-        card.classList.add("highlight");
-    });
-}
-highlightEmployeeCards();
-
-// Task 4: Implementing Removal of Employee Cards with Event Bubbling
-// Done inside the Task #2 section
