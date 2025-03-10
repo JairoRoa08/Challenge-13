@@ -16,12 +16,25 @@ function createEmployeeCard(name, position) {
     removeButton.setAttribute("class", "remove-btn");
     removeButton.addEventListener("click", function () {
         container.removeChild(card);
+    // Creating Edit button.
+        const editButton = document.createElement("button");
+    editButton.textContent = "Edit";
+    editButton.setAttribute("class", "edit-btn");
+    // Click Event listener (Task #4)
+    removeButton.addEventListener("click", function (event) {
+        container.removeChild(card); // Remove the specific card
+        event.stopPropagation(); // Prevent event from bubbling to the container
+    });
     });
     card.appendChild(nameHeading);
     card.appendChild(positionPara);
     card.appendChild(removeButton);
+    card.appendChild(editButton);
     container.appendChild(card);
 }
+document.getElementById("employeeContainer").addEventListener("click", function () {
+    console.log("An employee card was clicked!");
+});
 createEmployeeCard("Sam Bam", "Software Engineer");
 createEmployeeCard("Bruce Wayne", "Project Manager");
 
@@ -35,3 +48,6 @@ function highlightEmployeeCards() {
     });
 }
 highlightEmployeeCards();
+
+// Task 4: Implementing Removal of Employee Cards with Event Bubbling
+// Done inside the Task #2 section
